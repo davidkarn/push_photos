@@ -28,6 +28,12 @@
 	<array>
 		<string>armv7</string>
 	</array>
+	<key>NSCameraUsageDescription</key>
+	<string>take photos</string>
+	<key>NSLocationUsageDescription</key>
+	<string>attach location to photos</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>attach location to photos</string>
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>

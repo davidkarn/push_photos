@@ -193,6 +193,7 @@
 				TargetAttributes = {
 					63504E3E1E7E009700C6B865 = {
 						CreatedOnToolsVersion = 8.2.1;
+						DevelopmentTeam = T3T8D5E5W9;
 						ProvisioningStyle = Automatic;
 					};
 					63504E521E7E009700C6B865 = {
@@ -410,6 +411,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = T3T8D5E5W9;
 				INFOPLIST_FILE = picturetaker/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = webdever.net.picturetaker;
@@ -422,6 +424,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = T3T8D5E5W9;
 				INFOPLIST_FILE = picturetaker/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = webdever.net.picturetaker;
