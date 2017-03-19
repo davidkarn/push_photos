@@ -14,6 +14,8 @@
 		63504E4D1E7E009700C6B865 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 63504E4B1E7E009700C6B865 /* LaunchScreen.storyboard */; };
 		63504E581E7E009700C6B865 /* picturetakerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63504E571E7E009700C6B865 /* picturetakerTests.swift */; };
 		63504E631E7E009700C6B865 /* picturetakerUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63504E621E7E009700C6B865 /* picturetakerUITests.swift */; };
+		63504E711E7E15CE00C6B865 /* Mapbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 63504E701E7E15CE00C6B865 /* Mapbox.framework */; };
+		63504E721E7E15CE00C6B865 /* Mapbox.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 63504E701E7E15CE00C6B865 /* Mapbox.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -33,6 +35,20 @@
 		};
 /* End PBXContainerItemProxy section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		63504E731E7E15CE00C6B865 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				63504E721E7E15CE00C6B865 /* Mapbox.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
 		63504E3F1E7E009700C6B865 /* picturetaker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = picturetaker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		63504E421E7E009700C6B865 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -47,6 +63,7 @@
 		63504E5E1E7E009700C6B865 /* picturetakerUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = picturetakerUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		63504E621E7E009700C6B865 /* picturetakerUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = picturetakerUITests.swift; sourceTree = "<group>"; };
 		63504E641E7E009700C6B865 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		63504E701E7E15CE00C6B865 /* Mapbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Mapbox.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -54,6 +71,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				63504E711E7E15CE00C6B865 /* Mapbox.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -77,6 +95,7 @@
 		63504E361E7E009700C6B865 = {
 			isa = PBXGroup;
 			children = (
+				63504E701E7E15CE00C6B865 /* Mapbox.framework */,
 				63504E411E7E009700C6B865 /* picturetaker */,
 				63504E561E7E009700C6B865 /* picturetakerTests */,
 				63504E611E7E009700C6B865 /* picturetakerUITests */,
@@ -135,6 +154,8 @@
 				63504E3B1E7E009700C6B865 /* Sources */,
 				63504E3C1E7E009700C6B865 /* Frameworks */,
 				63504E3D1E7E009700C6B865 /* Resources */,
+				63504E731E7E15CE00C6B865 /* Embed Frameworks */,
+				63504E741E7E15E300C6B865 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -254,6 +275,22 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		63504E741E7E15E300C6B865 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "bash \"${BUILT_PRODUCTS_DIR}/${FRAMEWORKS_FOLDER_PATH}/Mapbox.framework/strip-frameworks.sh\"\n";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		63504E3B1E7E009700C6B865 /* Sources */ = {
@@ -412,6 +449,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = T3T8D5E5W9;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				INFOPLIST_FILE = picturetaker/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = webdever.net.picturetaker;
@@ -425,6 +466,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = T3T8D5E5W9;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				INFOPLIST_FILE = picturetaker/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = webdever.net.picturetaker;

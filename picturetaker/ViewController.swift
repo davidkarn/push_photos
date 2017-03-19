@@ -9,13 +9,16 @@
 import UIKit
 import CoreLocation;
 import AVFoundation;
+import Mapbox;
 
 class ViewController: UIViewController, CLLocationManagerDelegate,
     UINavigationControllerDelegate,
     UIImagePickerControllerDelegate {
     let locationManager = CLLocationManager()
     var imagePicker: UIImagePickerController!
+    var selected_location: CLLocationCoordinate2D!
 
+    @IBOutlet weak var map_view: MGLMapView!
     var session: AVCaptureSession?
     var stillImageOutput: AVCaptureStillImageOutput?
     var videoPreviewLayer: AVCaptureVideoPreviewLayer?
@@ -24,7 +27,12 @@ class ViewController: UIViewController, CLLocationManagerDelegate,
     @IBOutlet weak var preview: UIView!
     @IBOutlet weak var image_view: UIImageView!
     @IBOutlet weak var picture_button: UIButton!
+    @IBOutlet weak var submit_button: UIButton!
 
+    @IBAction func submit_clicked(_ sender: Any) {
+        self.post_photo({(response: URLResponse?, data: Data?, error: Error?) -> Void in
+            OperationQueue.main.addOperation {
+                print("got response", data)}})}
 
     func message_form_data(_ boundary:String,
                            parameters: [String: String]?) -> Data {
@@ -58,6 +66,9 @@ class ViewController: UIViewController, CLLocationManagerDelegate,
 
     func post_photo(
         _ completion_handler: @escaping (URLResponse?, Data?, Error?) -> Void) {
+        map_view.isHidden = true
+        picture_button.isHidden = false
+        submit_button.isHidden = true
         print("pressed post message in")
         let url        : String   = "https://google.com/post_image"
         let request               = NSMutableURLRequest()
@@ -65,7 +76,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate,
         request.url = URL(string: url)
         request.httpMethod = "PUT"
 
-        let location = get_location_object()
+        let location = get_selected_location_object()
 
         let boundary = generate_boundary()
         let fullData = message_form_data(
@@ -88,10 +99,11 @@ class ViewController: UIViewController, CLLocationManagerDelegate,
             completionHandler:   completion_handler as! (URLResponse?, Data?, Error?) -> Void) }
 
     @IBAction func take_picture_tapped(_ sender: Any) {
+
         if let videoConnection = stillImageOutput!.connection(withMediaType: AVMediaTypeVideo) {
         stillImageOutput?.captureStillImageAsynchronously(from: videoConnection, completionHandler: { (sampleBuffer, error) -> Void in
 
-        if sampleBuffer != nil {
+            if sampleBuffer != nil {
             let imageData = AVCaptureStillImageOutput.jpegStillImageNSDataRepresentation(sampleBuffer)
             let dataProvider = CGDataProvider(data: imageData as! CFData)
             let cgImageRef = CGImage(jpegDataProviderSource: dataProvider!, decode: nil, shouldInterpolate: true, intent: CGColorRenderingIntent.defaultIntent)
@@ -99,11 +111,57 @@ class ViewController: UIViewController, CLLocationManagerDelegate,
             self.image = image
             // ...
             // Add the image to captureImageView here...
+        self.test_location()
+            self.image_view.image = image
+                return;
             self.post_photo({(response: URLResponse?, data: Data?, error: Error?) -> Void in
                 OperationQueue.main.addOperation {
-                    print("got response", data)}})
+                    print("got response", data)}}) }})}}
 
-            self.image_view.image = image }})}}
+
+    func set_up_map() {
+        let longPressRecogniser = UILongPressGestureRecognizer(target: self, action: #selector(self.handleLongPress(_:)))
+        longPressRecogniser.minimumPressDuration = 1.0
+        map_view.addGestureRecognizer(longPressRecogniser)
+    }
+
+    func handleLongPress(_ getstureRecognizer : UIGestureRecognizer){
+        if getstureRecognizer.state != .began { return }
+
+        let touchPoint = getstureRecognizer.location(in: map_view)
+        let touchMapCoordinate = map_view.convert(touchPoint, toCoordinateFrom: map_view)
+
+
+        let dropPin = MGLPointAnnotation()
+        dropPin.coordinate = touchMapCoordinate
+        dropPin.title = "User posted location"
+        map_view.addAnnotation(dropPin)
+
+        selected_location = touchMapCoordinate
+
+        map_view.addAnnotation(dropPin)
+    }
+
+    func test_location() {
+        map_view.isHidden = false
+        submit_button.isHidden = false
+        picture_button.isHidden = true
+
+        if (map_view.annotations != nil) {
+            map_view.removeAnnotations(map_view.annotations!) }
+        let location = get_location_object()
+        var camera = MGLMapCamera(lookingAtCenter:
+        locationManager.location!.coordinate, fromDistance: CLLocationDistance(2.0), pitch: 1.0, heading: locationManager.heading!.magneticHeading)
+        let dropPin = MGLPointAnnotation()
+        dropPin.coordinate = locationManager.location!.coordinate
+        selected_location = locationManager.location!.coordinate
+        dropPin.title = "Is this location correct?"
+        map_view.addAnnotation(dropPin)
+        map_view.fly(to: camera) {
+            print("flown", self.locationManager.location)
+        }
+    }
+    
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -173,11 +231,29 @@ class ViewController: UIViewController, CLLocationManagerDelegate,
                 "longitude": String(locationManager.location!.coordinate.longitude),
                 "floor": String(locationManager.location!.floor != nil ? String(locationManager.location!.floor!.level) : "")]}
 
+    func get_selected_location_object() -> [String: String] {
+        if (locationManager.location == nil) {
+            return [:] }
+        var heading = ""
+        if (locationManager.heading! != nil) {
+            heading = String(locationManager.heading!.magneticHeading)
+        }
+        return ["altitude": String(locationManager.location!.altitude),
+                "course":   String(locationManager.location!.course),
+                "heading":   heading,
+                "latitude": String(selected_location!.latitude),
+                "longitude": String(selected_location!.longitude),
+                "floor": String(locationManager.location!.floor != nil ? String(locationManager.location!.floor!.level) : "")]}
+
     override func viewDidLoad() {
         super.viewDidLoad()
         let bounds        = UIScreen.main.bounds
         preview.frame = CGRect(x: 0, y: 0, width: bounds.width, height:bounds.height - 100)
+        map_view.frame = CGRect(x: 0, y: 0, width: bounds.width, height:bounds.height - 100)
+
         picture_button.frame = CGRect(x: 30, y: bounds.height - 70, width: bounds.width / 2,height: 70)
+        submit_button.frame = CGRect(x: 30, y: bounds.height - 70, width: bounds.width / 2,height: 70)
+        submit_button.isHidden = true
 
         locationManager.delegate = self;
         locationManager.distanceFilter = kCLLocationAccuracyNearestTenMeters;
@@ -187,7 +263,8 @@ class ViewController: UIViewController, CLLocationManagerDelegate,
             locationManager.startUpdatingHeading()
             locationManager.delegate = self
         }
-
+        map_view.isHidden = true
+        set_up_map()
         load_camera() }
 
     func load_camera() {

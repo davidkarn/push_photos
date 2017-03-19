@@ -34,6 +34,8 @@
 	<string>attach location to photos</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>attach location to photos</string>
+	<key>MGLMapboxAccessToken</key>
+	<string>pk.eyJ1IjoiZGF2aWRrYXJuIiwiYSI6ImNpZjFmdXlpYzBmbDBzcW01bDF3b3kyMTIifQ.-ilX5JP9cl1MrPMQUZJ6Gw</string>
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
